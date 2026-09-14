@@ -1,19 +1,3 @@
-# Retrace CI integration
-#
-# Drop this file into a repo at: .github/workflows/retrace-classify.yml
-#
-# What it does:
-#   1. Runs your test suite.
-#   2. If tests fail, grabs the failure log.
-#   3. Sends the log to your deployed Retrace API (/classify).
-#   4. Posts the classification (cause, confidence, reasoning) as a PR comment.
-#
-# Requirements:
-#   - RETRACE_API_URL: set as a repo variable (Settings > Secrets and variables >
-#     Actions > Variables), e.g. https://your-retrace-backend.onrender.com/classify
-#   - No extra secrets needed for posting the comment — GITHUB_TOKEN is provided
-#     automatically by GitHub Actions.
-
 name: Retrace failure classification
 
 on:

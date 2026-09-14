@@ -23,7 +23,9 @@ jobs:
 
       - name: Run tests
         id: run_tests
-        run: npm test 2>&1 | tee test-output.log
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test-output.log
         continue-on-error: true
 
       - name: Classify failure with Retrace

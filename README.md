@@ -1,51 +1,166 @@
 # Retrace GitHub Actions Integration
 
-This repository demonstrates the GitHub Actions integration for **Retrace**, an AI-powered CI failure classification tool.
+This repository demonstrates how **Retrace** can be integrated into a GitHub Actions CI workflow to automatically classify test failures.
 
-## What is Retrace?
+👉 **Main Retrace project:** https://github.com/thuluxx/retrace
 
-Retrace analyzes CI/test failure logs and determines the likely cause of a failure.
+## 🚀 What This Demo Shows
 
-Instead of forcing developers to manually inspect large CI logs, Retrace provides:
+When a test fails in GitHub Actions, the workflow sends the failure information to Retrace.
 
-- Failure classification
-- Confidence score
-- Reasoning behind the classification
-- Relevant failure evidence
+Retrace analyzes the failure and returns:
 
-## GitHub Actions Integration
+- A failure classification
+- A confidence score
+- A short explanation of why the failure was classified that way
 
-This repository demonstrates how Retrace can be integrated directly into a GitHub Actions workflow.
+The result is then posted directly to the GitHub Pull Request.
 
-The workflow:
-
-1. Checks out the repository.
-2. Sets up Node.js.
-3. Installs dependencies.
-4. Runs the test suite.
-5. Captures the test failure log.
-6. Sends the failure log to the Retrace `/classify` API.
-7. Receives the AI-generated classification.
-8. Posts the classification as a comment on the GitHub Pull Request.
-9. Fails the workflow if the tests failed.
-
-### Workflow
+## 🔄 Workflow
 
 ```text
-Code pushed / Pull Request
-          ↓
-     GitHub Actions
-          ↓
-       Run tests
-          ↓
-      Test failure
-          ↓
-    Capture failure log
-          ↓
-   Retrace /classify API
-          ↓
-   AI failure analysis
-          ↓
- Classification + confidence
-          ↓
-   GitHub PR comment
+Pull Request
+     ↓
+GitHub Actions starts
+     ↓
+Install dependencies
+     ↓
+Run tests
+     ↓
+Test fails
+     ↓
+Send failure output to Retrace
+     ↓
+Retrace analyzes failure
+     ↓
+Classification + confidence
+     ↓
+Post result as PR comment
+```
+
+## ⚙️ Workflow File
+
+The GitHub Actions workflow is located at:
+
+```text
+.github/workflows/retrace-classify.yml
+```
+
+The workflow performs the following steps:
+
+1. **Checkout repository**
+2. **Set up Node.js**
+3. **Install dependencies**
+4. **Run tests**
+5. **Classify failure with Retrace**
+6. **Post classification as a PR comment**
+7. **Fail the job if the tests failed**
+
+## 🧪 Example Failure
+
+This repository contains a deterministic failing test used to demonstrate Retrace.
+
+Example:
+
+```text
+Expected: 1260
+Received: 1400
+```
+
+The test failure is sent to Retrace for classification.
+
+Retrace returns:
+
+```text
+Retrace classification: likely real regression
+Confidence: 95%
+```
+
+with an explanation similar to:
+
+```text
+The test deterministically expects a total of 1260
+but receives 1400, indicating a change in application
+logic rather than timing or external factors.
+```
+
+## 💬 Pull Request Result
+
+After the workflow runs, Retrace posts the classification directly to the Pull Request.
+
+Example:
+
+```text
+Retrace classification: likely real regression (95% confidence)
+
+The test deterministically expects a total of 1260
+but receives 1400, indicating a change in application
+logic rather than timing or external factors.
+```
+
+This means developers can see the classification without leaving the PR.
+
+## 🔧 Configuration
+
+The workflow uses the Retrace API through the configured API URL:
+
+```text
+RETRACE_API_URL
+```
+
+GitHub Actions secrets/environment variables can be used for any required credentials.
+
+## 📁 Repository Structure
+
+```text
+.
+├── .github/
+│   └── workflows/
+│       └── retrace-classify.yml
+├── tests/
+├── package.json
+└── README.md
+```
+
+## 🛠️ Built With
+
+- JavaScript
+- Node.js
+- Jest
+- GitHub Actions
+- GitHub
+- REST API
+- Retrace
+- AI
+
+## 🎯 Purpose
+
+This repository is primarily a **demo/integration repository** for Retrace.
+
+The main project contains the Retrace application itself:
+
+👉 **https://github.com/thuluxx/retrace**
+
+This repository shows how that system can be connected to a real GitHub Actions workflow.
+
+## 🔗 Related
+
+### Main Retrace Repository
+
+👉 https://github.com/thuluxx/retrace
+
+### GitHub Actions Integration
+
+👉 https://github.com/thuluxx/retrace-test
+
+## 🗺️ Future Improvements
+
+Possible future improvements to the integration include:
+
+- More failure classifications
+- Better failure explanations
+- Support for additional test frameworks
+- Support for additional CI providers
+- Historical CI failure analysis
+- Richer PR comments
+- Automatic suggestions for next debugging steps
